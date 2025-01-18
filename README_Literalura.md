@@ -100,9 +100,6 @@ if (anoBuscado >= autor.getDataNascimento() && anoBuscado <= autor.getDataFaleci
 ## Contribuição
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
 
-## Licença
-Este projeto está licenciado sob a [MIT License](LICENSE).
-
 ---
 
 Desenvolvido por **Felipe Augusto de Lima Silveira**.
