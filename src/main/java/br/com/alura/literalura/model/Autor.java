@@ -17,6 +17,7 @@ public class Autor {
     @JoinColumn(name = "livro_id")
     private Livro livro;
 
+
     public Autor(){
 
     }

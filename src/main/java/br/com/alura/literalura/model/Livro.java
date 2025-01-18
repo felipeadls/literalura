@@ -1,5 +1,6 @@
 package br.com.alura.literalura.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class Livro {
     private Integer totalDownloads;
 
     @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Autor> autores;
 
     public Livro() {}

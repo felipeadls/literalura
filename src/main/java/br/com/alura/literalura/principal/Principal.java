@@ -5,22 +5,22 @@ import br.com.alura.literalura.repository.AutorRepository;
 import br.com.alura.literalura.repository.LivroRepository;
 import br.com.alura.literalura.service.ConsumoApi;
 import br.com.alura.literalura.service.ConverteDados;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
 import java.util.Scanner;
 
 
 @Component
-@AllArgsConstructor
 public class Principal {
 
     private Scanner leitura = new Scanner(System.in);
     private ConsumoApi consumoApi = new ConsumoApi();
     private ConverteDados conversor = new ConverteDados();
     private String endereco = "https://gutendex.com/books/?search=";
+    private int contador;
     @Autowired
     private LivroRepository livroRepository;
     @Autowired
@@ -43,6 +43,7 @@ public class Principal {
                     3 - Listar livros.
                     4 - Listar autores.
                     5 - Listar autores vivos em determinado ano.
+                    6 - Buscar quantidade de livro por idioma.
                     
                     9 - Sair
                     """;
@@ -57,7 +58,10 @@ public class Principal {
                 case 3 -> listarLivros();
                 case 4 -> listarAutores();
                 case 5 -> pesquisarDadosDeAutor();
-                case 9 -> System.out.println("Saindo da pesquisa!");
+                case 6 -> quantidadeDeLivrosPorIdioma();
+                case 9 -> { System.out.println("Saindo da pesquisa!");
+                    System.exit(0);
+                }
                 default -> System.out.println("Opção inválida.");
             }
 
@@ -74,9 +78,9 @@ public class Principal {
 
 
 
-       /* for (DadosLivro dadosLivro : dadosResultado.livro()) {
+       for (DadosLivro dadosLivro : dadosResultado.livro()) {
             Livro livro = new Livro(dadosLivro);
-            for (DadosAutor dadosAutor : dadosLivro.autores()){
+            for (DadosAutor dadosAutor : dadosLivro.autores()) {
                 Autor autor = new Autor(dadosAutor);
                 if (dadosAutor.anoNascimento() == null) {
                     autor.setDataNascimento(0);
@@ -85,28 +89,30 @@ public class Principal {
                 if (dadosAutor.anoFalecimento() == null) {
                     autor.setDataFalecimento(0);
                 }
+
                 livro.getAutores().add(autor);
-                autorRepository.save(autor);
 
             }
             livroRepository.save(livro);
-        }*/
+        }
 
     }
 
     private void exibirInformacoesAutor(DadosResultado dadosResultado) {
-        dadosResultado.livro().forEach(livro -> {
-            System.out.println("O livro de nome: " + livro.titulo());
-            livro.autores().forEach(autor ->
-                    System.out.println("O nome do autor é: " + autor.nomeAutor()));
-        });
+        DadosLivro livro = dadosResultado.livro().getFirst();
+
+        System.out.println("O livro de nome: " + livro.titulo());
+        System.out.println("O autor de nome: " + livro.autores().getFirst().nomeAutor());
+        System.out.println("Nascido no ano: " + livro.autores().getFirst().anoNascimento());
+        System.out.println("Falecido no ano: " + livro.autores().getFirst().anoFalecimento());
+
 
     }
 
     private void buscarAutores() {
         System.out.println("Digite o nome do autor desejado: ");
         String nomeAutor = leitura.nextLine();
-        List<Livro> livrosEncontrados = livroRepository.findAll();
+        List<Livro> livrosEncontrados = livroRepository.findByAutorContainingIgnoreCase(nomeAutor);
         if (livrosEncontrados.isEmpty()) {
             System.out.println("Nenhum livro encontrado para o autor " + nomeAutor);
         } else {
@@ -127,8 +133,7 @@ public class Principal {
 
         if (!livros.isEmpty()) {
             livros.stream().forEach(livro -> {
-                System.out.println("O nome do livro é: " + livro.getTitulo() +
-                        " O autor é: " + livro.getAutores().getFirst());
+                System.out.println("O nome do livro é: " + livro.getTitulo());
             });
         } else {
             System.out.println("Nenhum livro encontrado!");
@@ -137,16 +142,47 @@ public class Principal {
 
 
     private void listarAutores() {
-        System.out.println("Qual o nome do autor desejado? ");
-        var nomeAutor = leitura.nextLine();
-        List<Livro> autoresEncontrados = livroRepository.findAll();
-        System.out.println("Livros que: " + nomeAutor + "escreveu");
-        autoresEncontrados.forEach(livro ->
-                System.out.println(livro.getAutores()));
+        List<Autor> autoresEncontrados = autorRepository.findAll();
+        autoresEncontrados.forEach(autor -> {
+                    System.out.println("Autor encontrado: " + autor.getNomeAutor() + " | ★ Nascido no ano: "
+                            + autor.getDataNascimento() + " | ✞ Falecido no ano: " + autor.getDataFalecimento());
+                });
+
         }
 
     private void pesquisarDadosDeAutor() {
+        System.out.println("Digite o ano para busca: ");
+        var anoBuscado = leitura.nextInt();
+        List<Autor> autoresEncontrados = autorRepository.findAll();
+        autoresEncontrados.stream().forEach(data -> {
+                    if (anoBuscado >= data.getDataNascimento() && anoBuscado <= data.getDataFalecimento()) {
+                        System.out.println("O Autor: " + data.getNomeAutor() + " ★ estava vivo!");
+                    }
+                }
+                );
+
+
+
     }
+
+    private void quantidadeDeLivrosPorIdioma() {
+
+        System.out.println("Digite o idioma para consulta: ");
+        var idiomaSelecionado = leitura.nextLine();
+        contador = 0;
+        List<Livro> livrosEncontrados = livroRepository.findAll();
+        livrosEncontrados.stream().forEach(contagem -> {
+                if (contagem.getLinguagem().contains(idiomaSelecionado)) {
+                    contador++;
+                }
+
+
+        });
+
+        System.out.println("A quantidade de livos nesse idioma é: " + contador);
+
+    }
+
 }
 
 
