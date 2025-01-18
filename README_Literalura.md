@@ -15,7 +15,7 @@ A aplicação oferece as seguintes funcionalidades:
 6. **Consultar quantidade de livros por idioma:** Conta a quantidade de livros disponíveis em um idioma específico.
 
 ## Tecnologias Utilizadas
-- **Java 17**
+- **Java 21**
 - **Spring Boot 3**
 - **Spring Data JPA**
 - **PostgreSQL**
@@ -96,9 +96,6 @@ if (anoBuscado >= autor.getDataNascimento() && anoBuscado <= autor.getDataFaleci
    ```
 
 4. Interaja com o menu principal no console.
-
-## Contribuição
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
 
 ---
 
