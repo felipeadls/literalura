@@ -78,25 +78,6 @@ if (anoBuscado >= autor.getDataNascimento() && anoBuscado <= autor.getDataFaleci
     System.out.println("O autor estava vivo!");
 }
 ```
-
-## Como Executar o Projeto
-
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/literalura.git
-   ```
-
-2. Configure o PostgreSQL:
-   - Crie um banco de dados chamado `literalura`.
-   - Atualize as credenciais no arquivo `application.properties`.
-
-3. Instale as dependências e execute a aplicação:
-   ```bash
-   mvn spring-boot:run
-   ```
-
-4. Interaja com o menu principal no console.
-
 ---
 
 Desenvolvido por **Felipe Augusto de Lima Silveira**.
