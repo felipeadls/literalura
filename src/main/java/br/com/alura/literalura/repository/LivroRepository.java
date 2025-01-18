@@ -11,6 +11,5 @@ public interface LivroRepository extends JpaRepository<Livro, Long> {
     List<Livro> findByAutorContainingIgnoreCase(String name);
 
 
-
-
+    List<Livro> findTop10ByOrderByTotalDownloadsDesc();
 }

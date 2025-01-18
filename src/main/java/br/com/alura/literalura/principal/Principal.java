@@ -44,6 +44,7 @@ public class Principal {
                     4 - Listar autores.
                     5 - Listar autores vivos em determinado ano.
                     6 - Buscar quantidade de livro por idioma.
+                    7 - Buscar top 10 livros mais baixados.
                     
                     9 - Sair.
                     """;
@@ -59,6 +60,7 @@ public class Principal {
                 case 4 -> listarAutores();
                 case 5 -> pesquisarDadosDeAutor();
                 case 6 -> quantidadeDeLivrosPorIdioma();
+                case 7 -> top10LivrosMaisBaixados();
                 case 9 -> { System.out.println("Saindo da pesquisa!");
                     System.exit(0);
                 }
@@ -66,6 +68,7 @@ public class Principal {
             }
         }
     }
+
 
     private void buscarLivros() {
         System.out.println("Digite o nome do livro para busca: ");
@@ -159,6 +162,22 @@ public class Principal {
         });
 
         System.out.println("A quantidade de livos nesse idioma é: " + contador);
+    }
+
+    private void top10LivrosMaisBaixados() {
+
+        List<Livro> topLivros = livroRepository.findTop10ByOrderByTotalDownloadsDesc();
+        topLivros.forEach(top -> {
+            System.out.println(" ");
+            System.out.println("*----------*");
+            System.out.println("O livro: " + top.getTitulo());
+            System.out.println("Do autor " + top.getAutor());
+            System.out.println("Obteve: " + top.getTotalDownloads() + " downloads!");
+            System.out.println("*----------*");
+            System.out.println(" ");
+            ;
+
+        });
     }
 }
 
